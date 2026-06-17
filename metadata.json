@@ -1,0 +1,6 @@
+{
+  "name": "Скрабл Трекер",
+  "description": "Мінімалістичний темний додаток для відстеження рахунку та калькулятор очок для української версії Скрабл.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
