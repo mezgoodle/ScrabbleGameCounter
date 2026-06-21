@@ -633,8 +633,9 @@ fun ScoreboardScreen(
                             .fillMaxSize()
                             .testTag("history_list")
                     ) {
-                        itemsIndexed(gameState.history) { logIndex, log ->
-                            val isLast = logIndex == gameState.history.size - 1
+                        val recentHistory = gameState.history.takeLast(5)
+                        itemsIndexed(recentHistory) { logIndex, log ->
+                            val isLast = logIndex == recentHistory.size - 1
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = RoundedCornerShape(12.dp),
