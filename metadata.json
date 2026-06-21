@@ -1,6 +1,6 @@
 {
-  "name": "Скрабл Трекер",
-  "description": "Мінімалістичний темний додаток для відстеження рахунку та калькулятор очок для української версії Скрабл.",
+  "name": "Scrabble Tracker",
+  "description": "A minimalist, dark-mode Scrabble Scoreboard and Word Score Calculator for the Ukrainian version of the board game.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
