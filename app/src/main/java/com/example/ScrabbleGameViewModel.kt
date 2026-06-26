@@ -99,6 +99,16 @@ class ScrabbleGameViewModel(application: Application) : AndroidViewModel(applica
         saveGame()
     }
 
+    fun setActivePlayer(index: Int) {
+        val currentState = _gameState.value
+        if (index in currentState.players.indices) {
+            _gameState.update {
+                it.copy(activePlayerIndex = index)
+            }
+            saveGame()
+        }
+    }
+
     /**
      * Undoes the last recorded history entry.
      * Restores players' scores and updates the active player to that person.

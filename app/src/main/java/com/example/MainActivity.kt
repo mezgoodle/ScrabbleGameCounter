@@ -106,7 +106,8 @@ fun ScrabbleTrackerApp() {
                         onUndoTurn = { model.undoLastTurn() },
                         onEditTurn = { word, points, desc, base -> model.editLastTurn(word, points, desc, base) },
                         onEndGame = { model.endGame() },
-                        onResetGame = { model.resetGame() }
+                        onResetGame = { model.resetGame() },
+                        onSetPlayerActive = { index -> model.setActivePlayer(index) }
                     )
                 }
             }
@@ -369,7 +370,8 @@ fun ScoreboardScreen(
     onUndoTurn: () -> Unit,
     onEditTurn: (String, Int, String, Int) -> Unit,
     onEndGame: () -> Unit,
-    onResetGame: () -> Unit
+    onResetGame: () -> Unit,
+    onSetPlayerActive: (Int) -> Unit
 ) {
     var showAddWordDialog by remember { mutableStateOf(false) }
     var editIndexToLoad by remember { mutableStateOf<Int?>(null) } // Set to index if loading edit
@@ -463,7 +465,8 @@ fun ScoreboardScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .testTag("player_card_$index"),
+                            .testTag("player_card_$index")
+                            .clickable { onSetPlayerActive(index) },
                         shape = RoundedCornerShape(16.dp),
                         border = cardBorder,
                         colors = CardDefaults.cardColors(containerColor = cardBg),
@@ -729,29 +732,43 @@ fun ScoreboardScreen(
             // Big CTA to add words for the turn
             if (activePlayer != null) {
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(
-                    onClick = { showAddWordDialog = true },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .testTag("add_word_btn"),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = ActiveGold,
-                        contentColor = WalnutDark
-                    ),
-                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
-                ) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = null, modifier = Modifier.size(24.dp))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "ДОДАТИ СЛОВО ДЛЯ ${activePlayer.name.uppercase()}",
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Button(
+                        onClick = { showAddWordDialog = true },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .testTag("add_word_btn"),
+                        shape = RoundedCornerShape(16.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = ActiveGold,
+                            contentColor = WalnutDark
+                        ),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = null, modifier = Modifier.size(24.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "ДОДАТИ СЛОВО ДЛЯ ${activePlayer.name.uppercase()}",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 1.sp
+                            ),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
-                    )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    TextButton(
+                        onClick = { onAddTurn("", 0, "Пропуск ходу / Обмін літер", 0) },
+                        modifier = Modifier.fillMaxWidth().testTag("skip_turn_btn"),
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color.White.copy(alpha = 0.5f))
+                    ) {
+                        Text(text = "Пропустити хід", fontSize = 12.sp)
+                    }
                 }
             }
         }
