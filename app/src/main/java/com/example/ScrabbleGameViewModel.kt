@@ -24,7 +24,11 @@ class ScrabbleGameViewModel(application: Application) : AndroidViewModel(applica
         if (savedJson != null) {
             val loadedState = ScrabbleGameState.fromJsonString(savedJson)
             if (loadedState != null) {
-                _gameState.value = loadedState
+                if (loadedState.isGameOver) {
+                    _gameState.value = ScrabbleGameState()
+                } else {
+                    _gameState.value = loadedState
+                }
             }
         }
     }

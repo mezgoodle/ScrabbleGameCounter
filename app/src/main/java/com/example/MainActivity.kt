@@ -1327,6 +1327,8 @@ fun GameOverScreen(
     history: List<PlayHistoryEntry>,
     onNewGame: () -> Unit
 ) {
+    androidx.activity.compose.BackHandler(onBack = onNewGame)
+
     // Sort final placements
     val rankings = remember(players) {
         players.sortedByDescending { it.score }
